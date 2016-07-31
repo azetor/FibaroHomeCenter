@@ -1,4 +1,4 @@
-package com.mobilemonkeysoftware.fibarohomecenter;
+package com.mobilemonkeysoftware.fibarohomecenter.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import com.mobilemonkeysoftware.fibarohomecenter.MainApplication;
+import com.mobilemonkeysoftware.fibarohomecenter.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,5 +44,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @LayoutRes protected abstract int getLayoutResId();
+
+    public MainApplication getMainApplication() {
+        return (MainApplication) getApplication();
+    }
 
 }

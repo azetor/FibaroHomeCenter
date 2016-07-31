@@ -11,6 +11,10 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
+        buildConfigField 'String', 'API_URL', '"http://styx.fibaro.com:9999/api/"'
+        buildConfigField 'String', 'API_LOGIN', '"admin"'
+        buildConfigField 'String', 'API_PASSWORD', '"admin"'
     }
     buildTypes {
         release {
@@ -33,10 +37,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:1.9.5"
-    testCompile "org.robolectric:robolectric:3.0"
+    testCompile 'org.mockito:mockito-core:1.9.5'
+    testCompile 'org.robolectric:robolectric:3.0'
+    testApt 'com.google.dagger:dagger-compiler:2.0.2'
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
     compile 'com.android.support:recyclerview-v7:24.1.1'
@@ -47,7 +52,9 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'com.google.dagger:dagger:2.0.2'
     apt 'com.google.dagger:dagger-compiler:2.0.2'
+    provided 'javax.annotation:jsr250-api:1.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile project(':fibaroapi')
 }
