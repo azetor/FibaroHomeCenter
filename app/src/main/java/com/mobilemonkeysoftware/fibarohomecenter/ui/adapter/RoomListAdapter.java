@@ -1,17 +1,15 @@
 package com.mobilemonkeysoftware.fibarohomecenter.ui.adapter;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mobilemonkeysoftware.fibaroapi.model.Room;
 import com.mobilemonkeysoftware.fibarohomecenter.R;
-import com.mobilemonkeysoftware.fibarohomecenter.ui.activity.SectionActivity;
-import com.mobilemonkeysoftware.fibarohomecenter.ui.model.SectionItem;
+import com.mobilemonkeysoftware.fibarohomecenter.ui.activity.RoomActivity;
+import com.mobilemonkeysoftware.fibarohomecenter.ui.model.RoomItem;
 
 import java.util.List;
 
@@ -19,13 +17,13 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * Created by AR on 01/08/2016.
+ * Created by AR on 02/08/2016.
  */
-public class SectionListAdapter extends BaseListAdapter<SectionListAdapter.ViewHolder, SectionItem> {
+public class RoomListAdapter extends BaseListAdapter<RoomListAdapter.ViewHolder, RoomItem> {
 
     private Fragment mFragment;
 
-    public SectionListAdapter(@NonNull Fragment fragment, @NonNull List<SectionItem> items) {
+    public RoomListAdapter(@NonNull Fragment fragment, @NonNull List<RoomItem> items) {
         super(fragment.getContext(), items);
         mFragment = fragment;
     }
@@ -36,17 +34,17 @@ public class SectionListAdapter extends BaseListAdapter<SectionListAdapter.ViewH
 
     @Override public void onBindViewHolder(ViewHolder holder, int position) {
 
-        SectionItem item = getItem(position);
+        RoomItem item = getItem(position);
         holder.view.setTag(item);
-        holder.name.setText(item.section().name());
-        holder.rooms.setText(connectNames(item.getRoomsNames()));
+        holder.name.setText(item.room().name());
+        holder.devices.setText(connectNames(item.getDevicesNames()));
     }
 
     public class ViewHolder extends BaseViewHolder {
 
         @BindView(R.id.root_view) CardView view;
         @BindView(R.id.name) TextView name;
-        @BindView(R.id.subitems) TextView rooms;
+        @BindView(R.id.subitems) TextView devices;
 
         public ViewHolder(View view) {
             super(view);
@@ -54,9 +52,9 @@ public class SectionListAdapter extends BaseListAdapter<SectionListAdapter.ViewH
 
         @OnClick(R.id.root_view) public void onClick(View v) {
 
-            SectionItem item = (SectionItem) v.getTag();
+            RoomItem item = (RoomItem) v.getTag();
             if (item != null) {
-                mFragment.startActivity(SectionActivity.buildIntent(getContext(), item));
+                mFragment.startActivity(RoomActivity.buildIntent(getContext(), item));
             }
         }
     }

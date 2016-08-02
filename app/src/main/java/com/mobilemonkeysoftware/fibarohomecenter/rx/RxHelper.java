@@ -1,7 +1,10 @@
 package com.mobilemonkeysoftware.fibarohomecenter.rx;
 
+import com.mobilemonkeysoftware.fibaroapi.model.Device;
+import com.mobilemonkeysoftware.fibaroapi.model.DeviceType;
 import com.mobilemonkeysoftware.fibaroapi.model.Room;
 import com.mobilemonkeysoftware.fibaroapi.model.Section;
+import com.mobilemonkeysoftware.fibarohomecenter.ui.model.RoomItem;
 import com.mobilemonkeysoftware.fibarohomecenter.ui.model.SectionItem;
 
 import java.util.ArrayList;
@@ -55,6 +58,39 @@ public final class RxHelper {
                             }
                         }
                         return sectionItems;
+                    }
+                });
+    }
+
+    public static Observable<List<RoomItem>> loadRoomItems(final List<Room> rooms, Observable<List<Device>> devicesObservable) {
+        return devicesObservable
+                .flatMap(new Func1<List<Device>, Observable<List<RoomItem>>>() {
+                    @Override public Observable<List<RoomItem>> call(final List<Device> devices) {
+                        return Observable.create(new Observable.OnSubscribe<List<RoomItem>>() {
+                            @Override
+                            public void call(Subscriber<? super List<RoomItem>> subscriber) {
+
+                                try {
+                                    List<RoomItem> results = new ArrayList<>();
+                                    for (Room room : rooms) {
+                                        RoomItem item = RoomItem.create(room);
+                                        results.add(item);
+
+                                        for (Device device : devices) {
+                                            if (room.id() == device.roomId()
+                                                    && (DeviceType.BINARY_LIGHT.equals(device.type())
+                                                    || DeviceType.DIMMABLE_LIGHT.equals(device.type()))) {
+                                                item.devices().add(device);
+                                            }
+                                        }
+                                    }
+                                    subscriber.onNext(results);
+                                    subscriber.onCompleted();
+                                } catch (Exception e) {
+                                    subscriber.onError(e);
+                                }
+                            }
+                        });
                     }
                 });
     }

@@ -18,6 +18,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -64,18 +65,21 @@ public class ApiModule {
                     .append(Base64.encodeToString((mLogin + ":" + mPassword).getBytes(), Base64.NO_WRAP))
                     .toString();
 
-            return new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-                @Override
-                public Response intercept(Interceptor.Chain chain) throws IOException {
+            return new OkHttpClient.Builder()
+                    .addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(Interceptor.Chain chain) throws IOException {
 
-                    Request originalRequest = chain.request();
-                    Request.Builder newRequestBuilder = originalRequest.newBuilder()
-                            .header("Authorization", authorization)
-                            .header("Accept", "application/json")
-                            .method(originalRequest.method(), originalRequest.body());
-                    return chain.proceed(newRequestBuilder.build());
-                }
-            }).build();
+                            Request originalRequest = chain.request();
+                            Request.Builder newRequestBuilder = originalRequest.newBuilder()
+                                    .header("Authorization", authorization)
+                                    .header("Accept", "application/json")
+                                    .method(originalRequest.method(), originalRequest.body());
+                            return chain.proceed(newRequestBuilder.build());
+                        }
+                    })
+                    .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    .build();
         }
         return null;
     }

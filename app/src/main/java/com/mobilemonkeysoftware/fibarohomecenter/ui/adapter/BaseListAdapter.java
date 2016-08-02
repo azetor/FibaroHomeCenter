@@ -76,4 +76,14 @@ public abstract class BaseListAdapter<VH extends BaseViewHolder, T extends Parce
         return removed;
     }
 
+
+    @NonNull public String connectNames(@NonNull List<String> names) {
+
+        StringBuilder namesBuilder = new StringBuilder();
+        for (String name : names) {
+            namesBuilder.append(name).append("\n");
+        }
+        return namesBuilder.toString();
+    }
+
 }

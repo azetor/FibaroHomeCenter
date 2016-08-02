@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.mobilemonkeysoftware.fibaroapi.model.Device;
 import com.mobilemonkeysoftware.fibaroapi.model.Room;
 import com.mobilemonkeysoftware.fibaroapi.model.Section;
 
@@ -36,6 +37,15 @@ public abstract class SectionItem implements Parcelable, Item {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @NonNull public List<String> getRoomsNames() {
+
+        List<String> results = new ArrayList<>();
+        for (Room room: rooms()) {
+            results.add(room.name());
+        }
+        return results;
     }
 
 }

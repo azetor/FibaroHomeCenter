@@ -7,5 +7,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="empty_list_users">No sections to show…</string>
+    <string name="title_activity_device">DeviceActivity</string>
 
 </resources>

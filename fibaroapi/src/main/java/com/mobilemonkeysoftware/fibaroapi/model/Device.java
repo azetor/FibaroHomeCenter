@@ -26,4 +26,8 @@ public abstract class Device implements Parcelable {
         return new AutoValue_Device.GsonTypeAdapter(gson);
     }
 
+    public boolean isTurnOn() {
+        return Integer.valueOf(actions().turnOn()) > 0;
+    }
+
 }
