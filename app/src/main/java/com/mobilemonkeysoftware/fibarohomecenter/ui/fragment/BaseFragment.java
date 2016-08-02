@@ -1,15 +1,20 @@
-package com.mobilemonkeysoftware.fibarohomecenter.ui.activity.fragment;
+package com.mobilemonkeysoftware.fibarohomecenter.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mobilemonkeysoftware.fibaroapi.Api;
 import com.mobilemonkeysoftware.fibarohomecenter.MainApplication;
+import com.mobilemonkeysoftware.fibarohomecenter.ui.activity.MainActivity;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -19,9 +24,17 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment extends Fragment {
 
+    @Inject Api api;
+
     private ProgressDialog mProgressDialog;
 
     private Unbinder mUnbinder;
+
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getMainApplication().getApiComponent().inject(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,6 +85,10 @@ public abstract class BaseFragment extends Fragment {
 
     public MainApplication getMainApplication() {
         return (MainApplication) getActivity().getApplication();
+    }
+
+    public MainActivity getMainActivity() {
+        return (MainActivity) getActivity();
     }
 
 }

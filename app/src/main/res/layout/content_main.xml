@@ -10,9 +10,8 @@
     tools:context=".ui.activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/content_fragment"
-        android:name="com.mobilemonkeysoftware.fibarohomecenter.ui.activity.fragment.SettingsInfoFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

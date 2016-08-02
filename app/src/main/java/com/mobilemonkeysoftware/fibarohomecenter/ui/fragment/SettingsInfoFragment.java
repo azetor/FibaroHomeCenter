@@ -1,21 +1,17 @@
-package com.mobilemonkeysoftware.fibarohomecenter.ui.activity.fragment;
+package com.mobilemonkeysoftware.fibarohomecenter.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mobilemonkeysoftware.fibaroapi.Api;
 import com.mobilemonkeysoftware.fibaroapi.model.SettingsInfo;
 import com.mobilemonkeysoftware.fibarohomecenter.R;
 
 import java.util.Locale;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import rx.Observer;
@@ -33,24 +29,13 @@ public class SettingsInfoFragment extends BaseFragment {
     @BindView(R.id.mac) TextView mac;
     @BindView(R.id.soft_version) TextView softVersion;
 
-    @Inject Api api;
+    private View.OnClickListener mRefreshClickListener = new View.OnClickListener() {
+        @Override public void onClick(View view) {
 
-    @LayoutRes
-    @Override protected int getLayoutResId() {
-        return R.layout.fragment_settings_info;
-    }
-
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        getMainApplication().getApiComponent().inject(this);
-    }
-
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        loadSettingsInfo();
-    }
+            Snackbar.make(view, "Refresh Settings Info", Snackbar.LENGTH_LONG).show();
+            loadSettingsInfo();
+        }
+    };
 
     private void loadSettingsInfo() {
 
@@ -73,10 +58,28 @@ public class SettingsInfoFragment extends BaseFragment {
 
                         Log.i(TAG, "onNext: " + settingsInfo.toString());
                         serialNumber.setText(String.format(Locale.ENGLISH, "Serial number: %s", settingsInfo.serialNumber()));
-                        mac.setText(String.format(Locale.ENGLISH, "MAC Address: %s",settingsInfo.mac()));
-                        softVersion.setText(String.format(Locale.ENGLISH, "Software version: %s",settingsInfo.softVersion()));
+                        mac.setText(String.format(Locale.ENGLISH, "MAC Address: %s", settingsInfo.mac()));
+                        softVersion.setText(String.format(Locale.ENGLISH, "Software version: %s", settingsInfo.softVersion()));
                     }
                 });
+    }
+
+    @LayoutRes
+    @Override protected int getLayoutResId() {
+        return R.layout.fragment_settings_info;
+    }
+
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getMainActivity().registerRefreshClickListener(mRefreshClickListener);
+        loadSettingsInfo();
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        getMainActivity().unregisterRefreshClickListener();
     }
 
 }
