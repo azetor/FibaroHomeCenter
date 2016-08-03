@@ -28,7 +28,7 @@ public abstract class Device implements Parcelable {
     }
 
     public boolean isTurnOn() {
-        return actions() != null && TextUtils.equals(actions().turnOn(), "null") && Integer.valueOf(actions().turnOn()) > 0;
+        return Integer.valueOf(properties().value()) > 0;
     }
 
 }

@@ -68,21 +68,25 @@ public class RoomActivity extends BaseActivity implements DeviceView.OnDeviceCha
     private void setupView() {
 
         devicesLayout.removeAllViews();
-        for (Device device : mItem.devices()) {
-            DeviceView view = new DeviceView(this);
+        for (final Device device : mItem.devices()) {
+            final DeviceView view = new DeviceView(this);
             view.setTag(device);
             devicesLayout.addView(view);
-            view.setName(device.name());
-            view.setType(device.type());
-            view.setTurn(device.isTurnOn());
-            int level = 0;
-            try {
-                level = Integer.valueOf(device.properties().value());
-            } catch (NumberFormatException e) {
-                Log.e(TAG, "Level parse error", e);
-            }
-            view.setLevel(level);
-            view.setOnDeviceChangeListener(this);
+            devicesLayout.post(new Runnable() {
+                @Override public void run() {
+                    view.setName(device.name());
+                    view.setType(device.type());
+                    view.setTurn(device.isTurnOn());
+                    int level = 0;
+                    try {
+                        level = Integer.valueOf(device.properties().value());
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "Level parse error", e);
+                    }
+                    view.setLevel(level);
+                    view.setOnDeviceChangeListener(RoomActivity.this);
+                }
+            });
         }
     }
 
