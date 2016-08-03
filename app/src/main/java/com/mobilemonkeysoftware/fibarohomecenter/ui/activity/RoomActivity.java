@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.mobilemonkeysoftware.fibaroapi.model.Device;
-import com.mobilemonkeysoftware.fibaroapi.model.Room;
 import com.mobilemonkeysoftware.fibarohomecenter.R;
 import com.mobilemonkeysoftware.fibarohomecenter.ui.model.RoomItem;
 import com.mobilemonkeysoftware.fibarohomecenter.ui.view.DeviceView;
@@ -32,6 +31,8 @@ public class RoomActivity extends BaseActivity implements DeviceView.OnDeviceCha
 
     @BindView(R.id.devices) LinearLayout devicesLayout;
 
+    private RoomItem mItem;
+
     @NonNull public static Intent buildIntent(@NonNull Context context, @NonNull RoomItem item) {
         return new Intent(context, RoomActivity.class).putExtra(EXTRA_ITEM, item);
     }
@@ -40,18 +41,34 @@ public class RoomActivity extends BaseActivity implements DeviceView.OnDeviceCha
         return R.layout.activity_room;
     }
 
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (outState != null) {
+            outState.putParcelable(EXTRA_ITEM, mItem);
+        }
+    }
+
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        if (savedInstanceState != null) {
+            mItem = savedInstanceState.getParcelable(EXTRA_ITEM);
+        } else {
+            mItem = getIntent().getParcelableExtra(EXTRA_ITEM);
+        }
+        setTitle(mItem.room().name());
 
-        RoomItem item = getIntent().getParcelableExtra(EXTRA_ITEM);
-        setTitle(item.room().name());
+        setupView();
+    }
+
+    private void setupView() {
 
         devicesLayout.removeAllViews();
-        for (Device device : item.devices()) {
+        for (Device device : mItem.devices()) {
             DeviceView view = new DeviceView(this);
             view.setTag(device);
             devicesLayout.addView(view);

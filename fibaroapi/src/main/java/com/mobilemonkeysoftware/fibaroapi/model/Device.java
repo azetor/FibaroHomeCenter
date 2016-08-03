@@ -1,6 +1,7 @@
 package com.mobilemonkeysoftware.fibaroapi.model;
 
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -27,7 +28,7 @@ public abstract class Device implements Parcelable {
     }
 
     public boolean isTurnOn() {
-        return Integer.valueOf(actions().turnOn()) > 0;
+        return actions() != null && TextUtils.equals(actions().turnOn(), "null") && Integer.valueOf(actions().turnOn()) > 0;
     }
 
 }
